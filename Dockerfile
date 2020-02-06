@@ -13,6 +13,6 @@ COPY . /app
 
 EXPOSE 5000
 
-ENTRYPOINT [ "python" ]
+ENTRYPOINT [ "flask" ]
 
-CMD [ "app.py" ]
+CMD [ "run", "--host", "0.0.0.0" ]
