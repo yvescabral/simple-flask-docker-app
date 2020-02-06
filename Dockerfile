@@ -1,7 +1,5 @@
 FROM ubuntu:16.04
 
-MAINTANER Yves Cabral "yvescabral16@gmail.com"
-
 RUN apt-get update -y && \
     apt-get install -y python-pip python-dev
 
