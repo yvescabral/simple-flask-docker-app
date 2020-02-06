@@ -4,6 +4,7 @@ Build the image using the following command
 
 ```sh
 docker build -t simple-flask-app:latest .
+```
 
 Run the Docker container using the command shown below.
 
