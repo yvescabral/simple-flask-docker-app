@@ -1,5 +1,24 @@
 # Simple Python Flask Dockerized Application
 
+# Run locally
+Create a virtual env and activate it
+```sh
+python -m venv env && source env/bin/activate
+```
+
+Install requirements
+```sh
+pip install -r requirements.txt
+```
+
+Export needed env vars and run it
+```
+export FLASK_APP=testing_app
+export FLASK_ENV=development
+flask run
+```
+
+# Run on Docker
 Build the image using the following command
 
 ```sh
