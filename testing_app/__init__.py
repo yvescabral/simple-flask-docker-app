@@ -1,10 +1,12 @@
 import json
 import random
 import docker
+import github
 import requests
 from flask import Flask, request, jsonify
 from jinja2 import Environment, PackageLoader
 import testing_app.instances as instances
+import testing_app.settings as settings
 
 
 def create_app():
@@ -12,6 +14,7 @@ def create_app():
     jinja_env = Environment(loader=PackageLoader('testing_app', 'templates'))
     docker_client = docker.from_env()
     instances_repo = instances.RunningInstancesRepository()
+    github_client = github.Github(settings.GITHUB_ACCESS_TOKEN)
 
     def get_repo_config_from_template(template_name, data):
         template = jinja_env.get_template(f'{template_name}.jinja2')
@@ -46,6 +49,17 @@ def create_app():
             finally:
                 instances_repo.remove_instance(image_name)
 
+    def comment_on_pull_request(repo_full_name, branch_name, config):
+        repo = github_client.get_repo(repo_full_name)
+        if repo:
+            pulls_list = repo.get_pulls(state='open', head=branch_name)
+            pr = next(pulls_list, None)
+            if pr:
+                pr.create_comment(
+                    "You can test this feature at " +
+                    f"{settings.SERVER_URL}:{config['port']}"
+                )
+
     @app.route('/')
     def hello_world():
         return 'Hey, we have Python in a Docker container!'
@@ -61,9 +75,9 @@ def create_app():
             if branch_name.startswith('feature/'):
                 repository_name = request.json['repository']['name']
                 repo_config = get_repo_config(repository_name)
-                repository_full_name = repo_config['repository_full_name']
+                image_full_name = repo_config['image_full_name']
                 image_tag = branch_name.replace('/', '-')
-                image_name = f"{repository_full_name}:{image_tag}"
+                image_name = f"{image_full_name}:{image_tag}"
                 kill_container(image_name)
 
         return jsonify({})
@@ -74,8 +88,8 @@ def create_app():
         if image_tag and image_tag.startswith('feature-'):
             repository_name = request.json['repository']['name']
             repo_config = get_repo_config(repository_name)
-            repository_full_name = repo_config['repository_full_name']
-            image_name = f"{repository_full_name}:{image_tag}"
+            image_full_name = repo_config['image_full_name']
+            image_name = f"{image_full_name}:{image_tag}"
             kill_container(image_name)
             start_container(
                 image_name,
@@ -86,6 +100,12 @@ def create_app():
             # Send callback to Docker Hub
             callback_url = request.json['callback_url']
             requests.post(callback_url, json={'state': 'success'})
+
+            repository_full_name = repo_config['repository_full_name']
+            branch_name = image_tag.replace('feature-', 'feature/')
+            comment_on_pull_request(
+                repository_full_name, branch_name, repo_config
+            )
 
         return jsonify({})
 
