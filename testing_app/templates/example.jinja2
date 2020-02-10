@@ -2,6 +2,9 @@
     "image_full_name": "yvescabral/cd-testing",
     "repository_full_name": "yvescabral/cd-testing",
     "run_config": {
+        "environment": {
+            "FLASK_APP": "testing_app"
+        },
         "ports": {
             "5000/tcp": {{ random_port }}
         }
