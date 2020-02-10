@@ -42,6 +42,8 @@ def create_app():
                 container.stop()
                 container.remove()
             except docker.errors.NotFound:
+                pass
+            finally:
                 instances_repo.remove_instance(image_name)
 
     @app.route('/webhook/github', methods=['POST'])
