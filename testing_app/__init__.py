@@ -46,6 +46,10 @@ def create_app():
             finally:
                 instances_repo.remove_instance(image_name)
 
+    @app.route('/')
+    def hello_world():
+        return 'Hey, we have Python in a Docker container!'
+
     @app.route('/webhook/github', methods=['POST'])
     def github_webhook():
         github_event = request.headers.get('X-GitHub-Event')
