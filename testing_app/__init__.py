@@ -20,7 +20,7 @@ def create_app():
 
     def get_repo_config(repo_name):
         used_ports = set(instances_repo.get_running_ports())
-        available_ports = set(range(50000, 51000)) - used_ports
+        available_ports = list(set(range(50000, 51000)) - used_ports)
         data = {'random_port': random.choice(available_ports)}
         return get_repo_config_from_template(repo_name, data)
 
