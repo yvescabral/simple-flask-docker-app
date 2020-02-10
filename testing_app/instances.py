@@ -38,4 +38,4 @@ class RunningInstancesRepository:
         self.save()
 
     def get_running_ports(self):
-        return [v['port'] for v in self.data.values()]
+        return [v['port_number'] for v in self.data.values()]
