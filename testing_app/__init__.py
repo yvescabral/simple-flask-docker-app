@@ -9,7 +9,6 @@ import testing_app.instances as instances
 
 def create_app():
     app = Flask(__name__)
-
     jinja_env = Environment(loader=PackageLoader('testing_app', 'templates'))
     docker_client = docker.from_env()
     instances_repo = instances.RunningInstancesRepository()

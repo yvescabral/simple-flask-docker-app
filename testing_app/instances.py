@@ -20,7 +20,7 @@ class RunningInstancesRepository:
         if P.isfile(self.data_fn):
             os.remove(self.data_fn)
 
-        with open(self.data_fn) as data_fp:
+        with open(self.data_fn, 'w') as data_fp:
             json.dump(self.data, data_fp)
 
     def set_instance(self, image_key, container_id, port_number):
