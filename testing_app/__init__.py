@@ -4,7 +4,7 @@ import docker
 import requests
 from flask import Flask, request, jsonify
 from jinja2 import Environment, PackageLoader
-import instances
+import testing_app.instances as instances
 
 
 def create_app():
@@ -63,7 +63,7 @@ def create_app():
 
         return jsonify({})
 
-    @app.route('/webhook/docker_hub', methods=['POST'])
+    @app.route('/webhook/dockerhub', methods=['POST'])
     def docker_hub_webhook():
         image_tag = request.json.get('push_data', {}).get('tag')
         if image_tag and image_tag.startswith('feature-'):

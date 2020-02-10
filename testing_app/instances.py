@@ -10,10 +10,10 @@ class RunningInstancesRepository:
         self.data_fn = fn or self.DATA_FILE_NAME
         self.init_data()
 
-    def init_data(self, fn):
+    def init_data(self):
         self.data = {}
-        if P.isfile(fn):
-            with open(fn) as data_fp:
+        if P.isfile(self.data_fn):
+            with open(self.data_fn) as data_fp:
                 self.data = json.load(data_fp)
 
     def save(self):
