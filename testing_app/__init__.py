@@ -61,8 +61,8 @@ def create_app():
                 )
 
     @app.route('/')
-    def hello_world():
-        return 'Hey, we have Python in a Docker container!'
+    def hello():
+        return 'Heya!'
 
     @app.route('/webhook/github', methods=['POST'])
     def github_webhook():
