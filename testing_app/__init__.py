@@ -53,11 +53,11 @@ def create_app():
         repo = github_client.get_repo(repo_full_name)
         if repo:
             pulls_list = repo.get_pulls(state='open', head=branch_name)
-            pr = next(pulls_list, None)
+            pr = next(iter(pulls_list), None)
             if pr:
-                pr.create_comment(
+                pr.create_issue_comment(
                     "You can test this feature at " +
-                    f"{settings.SERVER_URL}:{config['port']}"
+                    f"{settings.SERVER_URL}:{config['port_number']}"
                 )
 
     @app.route('/')
