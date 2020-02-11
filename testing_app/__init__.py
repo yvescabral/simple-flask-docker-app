@@ -12,9 +12,14 @@ import testing_app.settings as settings
 def create_app():
     app = Flask(__name__)
     jinja_env = Environment(loader=PackageLoader('testing_app', 'templates'))
-    docker_client = docker.from_env()
     instances_repo = instances.RunningInstancesRepository()
     github_client = github.Github(settings.GITHUB_ACCESS_TOKEN)
+    docker_client = docker.from_env()
+    if settings.DOCKER_HUB_USERNAME and settings.DOCKER_HUB_PASSWORD:
+        docker_client.login(
+            settings.DOCKER_HUB_USERNAME,
+            settings.DOCKER_HUB_PASSWORD
+        )
 
     def get_repo_config_from_template(template_name, data):
         template = jinja_env.get_template(f'{template_name}.jinja2')
