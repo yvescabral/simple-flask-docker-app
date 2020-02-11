@@ -78,6 +78,8 @@ def create_app():
                 image_full_name = repo_config['image_full_name']
                 image_tag = branch_name.replace('/', '-')
                 image_name = f"{image_full_name}:{image_tag}"
+
+                # Remove container
                 kill_container(image_name)
 
         return jsonify({})
@@ -90,6 +92,8 @@ def create_app():
             repo_config = get_repo_config(repository_name)
             image_full_name = repo_config['image_full_name']
             image_name = f"{image_full_name}:{image_tag}"
+
+            # Update container
             kill_container(image_name)
             start_container(
                 image_name,
