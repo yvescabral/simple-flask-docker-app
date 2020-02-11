@@ -62,7 +62,7 @@ def create_app():
 
     @app.route('/')
     def hello():
-        return 'Heya!'
+        return 'Heya a!'
 
     @app.route('/webhook/github', methods=['POST'])
     def github_webhook():
